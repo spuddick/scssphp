@@ -2,7 +2,7 @@
 /**
  * SCSSPHP
  *
- * @copyright 2012-2015 Leaf Corcoran
+ * @copyright 2012-2017 Leaf Corcoran
  *
  * @license http://opensource.org/licenses/MIT MIT
  *
@@ -434,7 +434,7 @@ class Server
         $this->cacheDir = $cacheDir;
 
         if (! is_dir($this->cacheDir)) {
-            mkdir($this->cacheDir, 0755, true);
+            throw new ServerException('Cache directory doesn\'t exist: ' . $cacheDir);
         }
 
         if (! isset($scss)) {
@@ -446,18 +446,7 @@ class Server
         $this->showErrorsAsCSS = false;
 
         if (! ini_get('date.timezone')) {
-            date_default_timezone_set('UTC');
+            throw new ServerException('Default date.timezone not set');
         }
-    }
-
-    /**
-     * Helper method to serve compiled scss
-     *
-     * @param string $path Root path
-     */
-    public static function serveFrom($path)
-    {
-        $server = new self($path);
-        $server->serve();
     }
 }
